@@ -29,7 +29,7 @@ const Hero = () => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
         >
             <h2 className="text-sm md:text-base font-medium tracking-widest text-secondary mb-6 uppercase">
                 Digital Agency
@@ -39,7 +39,7 @@ const Hero = () => {
         <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 text-white"
         >
             We build digital <br /> products that scale.
