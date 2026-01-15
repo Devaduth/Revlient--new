@@ -19,7 +19,7 @@ const Background3D = () => {
                    Using a placeholder scene or a different known public URL 
                    is recommended if you have one.
                 */}
-                <Spline scene="https://prod.spline.design/kZDDjO5HuC9GJJwn/scene.splinecode" />
+                <Spline scene="https://prod.spline.design/6PM9t8MSp3l2FpSQ/scene.splinecode" />
             </Suspense>
         </ErrorBoundary>
         

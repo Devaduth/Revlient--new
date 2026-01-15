@@ -1,165 +1,130 @@
-import React, { useRef, useEffect, Suspense } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Code, Layout, Server, Zap, Repeat, ArrowRight } from 'lucide-react';
+import React, { useRef, Suspense } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Code, Layout, Server, Zap, Repeat, ArrowUpRight } from 'lucide-react';
 import Spline from '@splinetool/react-spline';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ErrorBoundary from '../ui/ErrorBoundary';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
+    id: '01',
     icon: Code,
     title: "Web Development",
-    description: "Custom websites built with modern technologies for speed and scalability."
+    tags: ["React", "Next.js", "WebGL"],
+    description: "We build digital platforms that define industries. Clean code, perfect semantics, and lightning-fast performance standard."
   },
   {
+    id: '02',
     icon: Server,
     title: "SaaS & CRM",
-    description: "Complex web applications and internal tools tailored to your business logic."
+    tags: ["Scalability", "Architecture", "Security"],
+    description: "Complex business logic translated into intuitive software. We build the engines that power high-growth startups."
   },
   {
+    id: '03',
     icon: Layout,
     title: "UI/UX Design",
-    description: "User-centric interfaces that convert visitors into loyal customers."
+    tags: ["Design Systems", "Prototyping", "Motion"],
+    description: "Interfaces that feel inevitable. We strip away the noise to reveal the essential interaction patterns your users need."
   },
   {
+    id: '04',
     icon: Zap,
     title: "Performance",
-    description: "Auditing and optimizing your digital presence for 100/100 Lighthouse scores."
+    tags: ["Optimization", "Lighthouse", "SEO"],
+    description: "Speed is a feature. We audit, optimize, and refactor existing codebases to achieve 100/100 performance scores."
   },
   {
+    id: '05',
     icon: Repeat,
     title: "Scaling",
-    description: "Ongoing support ensuring your platform grows with your user base."
+    tags: ["Cloud", "DevOps", "Maintenance"],
+    description: "Infrastructure that grows with you. From MVP to IPO, we ensure your tech stack never becomes a bottleneck."
   }
 ];
 
-const GlassCard = ({ service }) => {
-  // Mouse position state for tilt effect
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
-  const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
-
-  function onMouseMove({ currentTarget, clientX, clientY }) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    x.set(clientX - left - width / 2);
-    y.set(clientY - top - height / 2);
-  }
-
+const ServiceBlock = ({ service }) => {
+  const ref = useRef(null);
+  const slug = service.title.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/\//g, '-');
+  
   return (
     <motion.div 
-        className={`relative w-[80vw] md:w-[600px] h-[70vh] md:h-[500px] flex-shrink-0 rounded-[2rem] overflow-hidden border border-white/10 backdrop-blur-3xl bg-black/40 hover:bg-white/5 transition-all duration-500 group`}
-        onMouseMove={onMouseMove}
-        onMouseLeave={() => { x.set(0); y.set(0); }}
-        style={{
-            rotateX: useTransform(mouseY, [-250, 250], [5, -5]),
-            rotateY: useTransform(mouseX, [-300, 300], [-5, 5]),
-        }}
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ margin: "-20%", once: true }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // Antigravity ease
+      className="min-h-[70vh] flex flex-col justify-center py-24 md:py-32 border-b border-white/5 last:border-none"
     >
-        {/* Shine Effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="mb-12 flex items-center gap-6 text-white/30 font-mono text-xs tracking-[0.2em] uppercase">
+        <span>{service.id}</span>
+        <div className="h-px w-20 bg-white/10" />
+        <service.icon size={16} />
+      </div>
 
-        <div className="relative z-10 w-full h-full p-8 md:p-12 flex flex-col justify-between">
-            <div className="flex justify-between items-start">
-                 <div className="p-4 rounded-2xl bg-white/10 text-white backdrop-blur-md">
-                     <service.icon size={32} />
-                 </div>
-                 <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowRight className="text-white" size={20} />
-                 </div>
-            </div>
+      <Link to={`/service/${slug}`} className="block group cursor-pointer mb-10">
+        <h3 className="text-6xl md:text-9xl font-black text-white tracking-tighter leading-[0.85] group-hover:opacity-70 transition-opacity duration-700">
+          {service.title}
+        </h3>
+      </Link>
 
-            <div>
-                <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
-                    {service.title}
-                </h3>
-                <p className="text-lg text-white/70 leading-relaxed max-w-md">
-                    {service.description}
-                </p>
-            </div>
-        </div>
+      <div className="flex flex-wrap gap-4 mb-10">
+        {service.tags.map(tag => (
+          <span key={tag} className="px-4 py-1.5 rounded-full border border-white/10 text-white/50 text-[10px] uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-colors duration-500">
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <p className="text-xl md:text-3xl text-white/60 max-w-2xl leading-relaxed font-light tracking-tight">
+        {service.description}
+      </p>
+      
+      <div className="mt-16">
+        <Link to={`/service/${slug}`} className="group inline-flex items-center gap-3 text-white border-b border-white/0 hover:border-white transition-all pb-1">
+          <span className="uppercase tracking-[0.2em] text-xs font-medium">Explore</span>
+          <ArrowUpRight size={14} className="opacity-50 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-500" />
+        </Link>
+      </div>
     </motion.div>
   );
 };
 
 const Services = () => {
-  const sectionRef = useRef(null);
-  const triggerRef = useRef(null);
-  const sliderRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const container = sliderRef.current;
-      const totalWidth = container.scrollWidth;
-      const windowWidth = window.innerWidth;
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: `+=${totalWidth}`, // Scroll duration based on content width
-          pin: true,
-          scrub: 1,
-          snap: 1 / (services.length - 1),
-          invalidateOnRefresh: true,
-        }
-      });
-
-      // Horizontal Scroll
-      tl.to(container, {
-        x: -(totalWidth - windowWidth + 100), // Scroll to end with some padding
-        ease: "none"
-      });
-      
-      // Parallax Background Effect via GSAP
-      // Assuming the background is fixed, we can subtly move or rotate elements?
-      // Since Spline is internal, we might move the container slightly for parallax feeling
-      
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative z-10 bg-black">
-      <div ref={triggerRef} className="h-screen w-full overflow-hidden flex items-center relative">
-        
-        {/* Background - Fixed Parallax Layer */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
-            <ErrorBoundary fallback={<div className="w-full h-full bg-gradient-to-b from-black to-gray-900" />}>
-                 <Suspense fallback={null}>
-                    {/* Using a larger scene or scaling it up */}
-                    <div className="w-[120%] h-[120%] -ml-[10%] -mt-[10%] opacity-60 grayscale brightness-75 contrast-125">
-                         <Spline scene="https://prod.spline.design/kZDDjO5HuC9GJJwn/scene.splinecode" />
-                    </div>
-                 </Suspense>
-            </ErrorBoundary>
-        </div>
+    <section id="services" className="relative bg-black text-white w-full">
+      <div className="container mx-auto px-6 md:px-12">
+        <div className="flex flex-col lg:flex-row">
+          
+          <div className="w-full lg:w-1/2 relative z-10 pt-32 pb-60">
+             <div className="mb-40 pl-2">
+                <h2 className="text-xs font-bold tracking-[0.3em] text-white/30 uppercase mb-8 ml-1">Capabilities</h2>
+                <p className="text-5xl md:text-6xl text-white font-normal tracking-tighter leading-tight">
+                  Engineering the <br/>
+                  <span className="text-white/30">unimagined.</span>
+                </p>
+             </div>
 
-        {/* Floating Title (Fixed Position) */}
-        <div className="absolute top-10 left-6 md:left-20 z-20">
-             <h2 className="text-sm font-medium tracking-widest text-gray-400 uppercase mb-2">Capabilities</h2>
-             <p className="text-3xl font-bold text-white">Innovation in motion.</p>
-        </div>
+             <div className="flex flex-col gap-10">
+                {services.map((service, i) => (
+                  <ServiceBlock key={i} service={service} />
+                ))}
+             </div>
+          </div>
 
-        {/* Horizontal Card Container */}
-        <div 
-             ref={sliderRef} 
-             className="flex gap-10 md:gap-20 px-6 md:px-20 items-center h-full pt-20"
-             style={{ width: 'fit-content' }}
-        >
-             {services.map((service, i) => (
-                 <GlassCard key={i} service={service} />
-             ))}
-             
-             {/* End Spacer */}
-             <div className="w-20 flex-shrink-0" />
-        </div>
+          <div className="hidden ml-20 lg:block w-screen h-screen sticky top-0 right-0 z-0">
+             <div className="absolute inset-0 w-full h-full"> 
+                <ErrorBoundary fallback={<div className="w-full h-full bg-neutral-900" />}>
+                     <Suspense fallback={<div className="w-full h-full bg-black/50" />}>
+                        <div className="w-full ml-20 h-full grayscale opacity-80 mix-blend-screen brightness-90 contrast-125 scale-110">
+                            <Spline scene="https://prod.spline.design/6PM9t8MSp3l2FpSQ/scene.splinecode" />
+                        </div>
+                     </Suspense>
+                </ErrorBoundary>
+             </div>
+          </div>
 
+        </div>
       </div>
     </section>
   );

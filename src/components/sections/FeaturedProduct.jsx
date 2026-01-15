@@ -4,7 +4,7 @@ import Button from '../ui/Button';
 
 const FeaturedProduct = () => {
   return (
-    <section className="py-32 w-full relative z-10 overflow-hidden">
+    <section id="work" className="py-32 w-full relative z-10 bg-black overflow-hidden">
       <div className="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
         
         {/* Text Column */}

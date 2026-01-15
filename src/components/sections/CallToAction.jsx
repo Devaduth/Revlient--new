@@ -4,7 +4,7 @@ import Button from '../ui/Button';
 
 const CallToAction = () => {
   return (
-    <section className="py-32 w-full relative z-10 bg-black flex flex-col items-center justify-center text-center px-6">
+    <section id="about" className="py-32 w-full relative z-10 bg-black flex flex-col items-center justify-center text-center px-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}

@@ -2,10 +2,28 @@ import React, { Suspense } from 'react';
 import Spline from '@splinetool/react-spline';
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
+import ErrorBoundary from '../ui/ErrorBoundary';
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Antigravity Spline Background */}
+      <div className="absolute inset-0 z-0">
+        <ErrorBoundary fallback={<div className="w-full h-full bg-neutral-900" />}>
+          <Suspense fallback={<div className="w-full h-full bg-black" />}>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full grayscale brightness-75 contrast-125 scale-110 opacity-60 mix-blend-screen"
+            >
+               {/* Using a known working placeholder. Replace with your specific URL. */}
+               <Spline scene="https://prod.spline.design/6PM9t8MSp3l2FpSQ/scene.splinecode" />
+            </motion.div>
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-20">
         <motion.div
